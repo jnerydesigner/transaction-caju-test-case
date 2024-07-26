@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+   postgres-caju:
+     container_name: postgres-caju
+     image: postgres
+     environment:
+       POSTGRES_USER: root
+       POSTGRES_PASSWORD: "123456"
+       POSTGRES_DB: "caju"
+     ports:
+       - "15432:5432"
+     volumes:
+       - postgres-vol-caju:/var/lib/postgresql/data
+     networks:
+       - postgres-caju-network
+
+networks:
+  postgres-caju-network:
+    driver: bridge
+
+volumes:
+  postgres-vol-caju:
+    driver: local
