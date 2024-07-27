@@ -1,8 +1,11 @@
 package br.com.jandernery.transaction_caju.domain.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -19,6 +22,10 @@ public class UserEntity extends BaseEntity implements Serializable {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private AccountEntity account;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<TransactionEntity> transaction = new HashSet<>();
 
 
     public String getName() {
@@ -43,5 +50,13 @@ public class UserEntity extends BaseEntity implements Serializable {
 
     public void setAccount(AccountEntity account) {
         this.account = account;
+    }
+
+    public Set<TransactionEntity> getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Set<TransactionEntity> transaction) {
+        this.transaction = transaction;
     }
 }

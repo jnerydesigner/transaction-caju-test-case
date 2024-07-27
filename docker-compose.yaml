@@ -15,6 +15,20 @@ services:
      networks:
        - postgres-caju-network
 
+
+   pgadmin-compose:
+     container_name: pgadmin-compose
+     image: dpage/pgadmin4
+     environment:
+       PGADMIN_DEFAULT_EMAIL: "jander.webmaster@gmail.com"
+       PGADMIN_DEFAULT_PASSWORD: "123456"
+     ports:
+       - "16543:80"
+     depends_on:
+       - postgres-caju
+     networks:
+       - postgres-caju-network
+
 networks:
   postgres-caju-network:
     driver: bridge
