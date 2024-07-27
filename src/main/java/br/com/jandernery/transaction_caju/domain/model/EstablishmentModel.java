@@ -1,4 +1,4 @@
-package br.com.jandernery.transaction_caju.domain.entities;
+package br.com.jandernery.transaction_caju.domain.model;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,8 +10,12 @@ import java.util.Set;
 
 @Entity
 @Table(name = "TB_ESTABLISHMENT")
-public class EstablishmentEntity extends BaseEntity implements Serializable {
+public class EstablishmentModel extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1l;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
 
     @Column
@@ -22,7 +26,15 @@ public class EstablishmentEntity extends BaseEntity implements Serializable {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "establishment", fetch = FetchType.EAGER)
-    private Set<TransactionEntity> transaction = new HashSet<>();
+    private Set<TransactionModel> transaction = new HashSet<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getMerchant() {
         return merchant;
@@ -40,11 +52,11 @@ public class EstablishmentEntity extends BaseEntity implements Serializable {
         this.mcc = mcc;
     }
 
-    public Set<TransactionEntity> getTransaction() {
+    public Set<TransactionModel> getTransaction() {
         return transaction;
     }
 
-    public void setTransaction(Set<TransactionEntity> transaction) {
+    public void setTransaction(Set<TransactionModel> transaction) {
         this.transaction = transaction;
     }
 }

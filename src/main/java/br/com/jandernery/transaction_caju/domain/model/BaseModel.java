@@ -1,4 +1,4 @@
-package br.com.jandernery.transaction_caju.domain.entities;
+package br.com.jandernery.transaction_caju.domain.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.*;
@@ -6,12 +6,7 @@ import org.hibernate.annotations.*;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-public class BaseEntity{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
+public class BaseModel {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
