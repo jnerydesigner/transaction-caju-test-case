@@ -9,11 +9,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "TB_ACCOUNT")
 public class AccountModel extends BaseModel implements Serializable {
-    private static final long serialVersionUID = 1l;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,12 +24,22 @@ public class AccountModel extends BaseModel implements Serializable {
     private BigDecimal amount;
 
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private UserModel user;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "account")
+    private Set<TypeAccountModel> typeAccountModel = new HashSet<>();
+
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "account")
     private Set<TransactionModel> transaction = new HashSet<>();
+
+    public AccountModel() {
+    }
 
     public Long getId() {
         return id;
@@ -61,4 +72,14 @@ public class AccountModel extends BaseModel implements Serializable {
     public void setTransaction(Set<TransactionModel> transaction) {
         this.transaction = transaction;
     }
+
+    public Set<TypeAccountModel> getTypeAccountModel() {
+        return typeAccountModel;
+    }
+
+    public void setTypeAccountModel(Set<TypeAccountModel> typeAccountModel) {
+        this.typeAccountModel = typeAccountModel;
+    }
+
+
 }

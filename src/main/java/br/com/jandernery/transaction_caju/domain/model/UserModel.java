@@ -11,7 +11,7 @@ import java.util.Set;
 @Entity
 @Table(name = "TB_USER")
 public class UserModel extends BaseModel implements Serializable {
-    private static final long serialVersionUID = 1l;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,13 +23,16 @@ public class UserModel extends BaseModel implements Serializable {
     @Column(nullable = false, unique = true)
     private String userName;
 
-    @OneToOne
-    private AccountModel account;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Set<AccountModel> account = new HashSet<>();
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "user")
     private Set<TransactionModel> transaction = new HashSet<>();
 
+
+    public UserModel(){}
     public Long getId() {
         return id;
     }
@@ -54,11 +57,11 @@ public class UserModel extends BaseModel implements Serializable {
         this.userName = userName;
     }
 
-    public AccountModel getAccount() {
+    public Set<AccountModel> getAccount() {
         return account;
     }
 
-    public void setAccount(AccountModel account) {
+    public void setAccount(Set<AccountModel> account) {
         this.account = account;
     }
 

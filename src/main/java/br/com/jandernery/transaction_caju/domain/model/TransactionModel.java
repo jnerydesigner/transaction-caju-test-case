@@ -8,13 +8,11 @@ import java.io.Serializable;
 @Entity
 @Table(name = "TB_TRANSACTION")
 public class TransactionModel extends BaseModel implements Serializable {
-    private static final long serialVersionUID = 1l;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-
 
     @Column
     private String mcc;
@@ -36,6 +34,10 @@ public class TransactionModel extends BaseModel implements Serializable {
     @ManyToOne
     @JoinColumn(name = "establishment_id")
     private EstablishmentModel establishment;
+
+    public TransactionModel(){
+
+    }
 
     public Long getId() {
         return id;
