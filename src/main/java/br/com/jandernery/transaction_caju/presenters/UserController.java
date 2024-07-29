@@ -2,14 +2,10 @@ package br.com.jandernery.transaction_caju.presenters;
 
 import br.com.jandernery.transaction_caju.application.dto.UserDTO;
 import br.com.jandernery.transaction_caju.application.services.UserService;
-import br.com.jandernery.transaction_caju.domain.entities.UserEntity;
-import br.com.jandernery.transaction_caju.domain.model.UserModel;
+import br.com.jandernery.transaction_caju.domain.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -22,10 +18,14 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<UserEntity> saveUser(@RequestBody UserDTO user){
-        UserEntity userEntity = userService.saveUser(user);
-
+    public ResponseEntity<UserMapper> saveUser(@RequestBody UserDTO user){
+        UserMapper userEntity = userService.saveUser(user);
         return ResponseEntity.ok(userEntity);
+    }
+
+    @GetMapping("/find-one/{userId}/{accountId}")
+    public ResponseEntity<UserMapper> findById(@PathVariable("userId") Long userId, @PathVariable("accountId") Long accountId){
+        return ResponseEntity.ok(userService.findById(userId, accountId));
     }
 
 }

@@ -11,7 +11,7 @@ import java.util.Set;
 @Entity
 @Table(name = "TB_ESTABLISHMENT")
 public class EstablishmentModel extends BaseModel implements Serializable {
-    private static final long serialVersionUID = 1l;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,6 +27,10 @@ public class EstablishmentModel extends BaseModel implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "establishment", fetch = FetchType.EAGER)
     private Set<TransactionModel> transaction = new HashSet<>();
+
+    public EstablishmentModel(){
+
+    }
 
     public Long getId() {
         return id;
