@@ -3,6 +3,7 @@ package br.com.jandernery.transaction_caju.domain.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 
 @Entity
@@ -17,8 +18,9 @@ public class TransactionModel extends BaseModel implements Serializable {
     @Column
     private String mcc;
 
-    @Column
-    private double totalAmount;
+    @Column(nullable = false, precision = 8, scale = 2)
+    private BigDecimal totalAmount;
+
 
     @Column
     private String typeBalance;
@@ -55,11 +57,11 @@ public class TransactionModel extends BaseModel implements Serializable {
         this.mcc = mcc;
     }
 
-    public double getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(double totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 
