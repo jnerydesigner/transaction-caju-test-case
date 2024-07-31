@@ -1,4 +1,4 @@
-![enter image description here](https://raw.githubusercontent.com/jnerydesigner/transaction-caju-test-case/main/assets/transaction-caju-test-case.png)
+![Banner application](https://raw.githubusercontent.com/jnerydesigner/transaction-caju-test-case/main/assets/transaction-caju-test-case.png)
 
 # Transaction Caju Test case
 
@@ -13,5 +13,16 @@
 }
 
 ```
+
+### New Diagram Flow Application
+
+
+![Current diagram Flow Application](https://raw.githubusercontent.com/jnerydesigner/transaction-caju-test-case/main/out/arquitecture/Flow%20Diagram.png)
+
+
+### New files
+
+
+
 
 

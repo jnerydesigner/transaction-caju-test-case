@@ -37,6 +37,10 @@ public class MerchantTypeService {
         Iterable<MerchantTypeRedisModel> iterable = merchantTypeRedisRepository.findAll();
         List<MerchantTypeRedisModel> all = StreamSupport.stream(iterable.spliterator(), false)
                         .collect(Collectors.toList());
+
+
+
+
         for (MerchantTypeRedisModel merchant : all) {
             merchant.setMcc("5412");
             boolean padaria = containsWord(merchant.getMerchant(), "eats");
