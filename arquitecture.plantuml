@@ -1,0 +1,80 @@
+	
+@startuml Flow Diagram
+
+<style>
+activityDiagram {
+  BackgroundColor #a29bfe
+  BorderColor #6c5ce7
+  FontColor #FFFFF
+  FontName arial
+
+  diamond {
+    BackgroundColor #ffeaa7
+    LineColor #fdcb6e
+    FontColor green
+    FontName arial
+    FontSize 15
+  }
+  arrow {
+    FontColor gold
+    FontName arial
+    FontSize 15
+  }
+  partition {
+    LineColor red
+    FontColor green
+    RoundCorner 10
+    BackgroundColor PeachPuff
+  }
+  note {
+    FontColor Blue
+    LineColor Navy
+    BackgroundColor #ccf
+  }
+}
+document {
+   BackgroundColor LightYellow
+}
+</style>
+
+
+|#DarkGoldenRod|Client|
+start
+:**Cliente se autentica**;
+
+|#gold|Autenticador|
+:**token**;
+note left: O token contem accountId e userId
+
+
+if (autenticou?) is (autenticado) then
+|#DarkGoldenRod|Client|
+:**autenticado**;
+
+else (não autenticado)
+|#lightgray|Aplicação|
+:**não autenticado**;
+:saída;
+stop
+endif
+
+|#DarkGoldenRod|Client|
+:**Faz a Operação**;
+|#lightgray|Aplicação|
+:**Cria a transação**;
+
+if(Transação?) is (sucesso) then
+|#DarkGoldenRod|Aplicação|
+:**Transação realizada**;
+|#DarkGoldenRod|Client|
+:**Comprovante**;
+|#lightgray|Aplicação|
+:saída;
+else (falha)
+|#lightgray|Aplicação|
+:**Transação falhou**;
+:saída;
+endif
+
+stop
+@enduml
