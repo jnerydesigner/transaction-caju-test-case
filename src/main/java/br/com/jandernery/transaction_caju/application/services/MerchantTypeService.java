@@ -1,29 +1,37 @@
 package br.com.jandernery.transaction_caju.application.services;
 
 import br.com.jandernery.transaction_caju.application.dto.MerchantTypeRequest;
+import br.com.jandernery.transaction_caju.domain.model.MccSpecialityMerchantModel;
 import br.com.jandernery.transaction_caju.domain.model.MerchantTypeRedisModel;
+import br.com.jandernery.transaction_caju.infra.configuration.RedisConfig;
+import br.com.jandernery.transaction_caju.infra.repository.MccSpecialityMerchantRepository;
 import br.com.jandernery.transaction_caju.infra.repository.MerchantTypeRedisRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
 public class MerchantTypeService {
 
+
+
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
+    @Autowired
+    RedisConfig redisConfig;
+
+    @Autowired
+    MccSpecialityMerchantRepository mccSpecialityMerchantRepository;
+
     private final MerchantTypeRedisRepository merchantTypeRedisRepository;
 
-    public MerchantTypeService(MerchantTypeRedisRepository merchantTypeRedisRepository) {
+    public MerchantTypeService(Jedis jedis, MerchantTypeRedisRepository merchantTypeRedisRepository) {
         this.merchantTypeRedisRepository = merchantTypeRedisRepository;
     }
 
@@ -34,21 +42,23 @@ public class MerchantTypeService {
 
 
     public void createMerchantType(MerchantTypeRequest request){
+        redisClearDatabase();
         Iterable<MerchantTypeRedisModel> iterable = merchantTypeRedisRepository.findAll();
-        List<MerchantTypeRedisModel> all = StreamSupport.stream(iterable.spliterator(), false)
-                        .collect(Collectors.toList());
+        List<MerchantTypeRedisModel> merchantTypeAllList = StreamSupport.stream(iterable.spliterator(), false)
+                        .toList();
 
+        Iterable<MccSpecialityMerchantModel> mccSpecialistItr = mccSpecialityMerchantRepository.findAll();
+        List<MccSpecialityMerchantModel> mccSpecialistList = StreamSupport.stream(mccSpecialistItr.spliterator(), false).toList();
 
-
-
-        for (MerchantTypeRedisModel merchant : all) {
-            merchant.setMcc("5412");
-            boolean padaria = containsWord(merchant.getMerchant(), "eats");
-            System.out.println(padaria);
-            merchantTypeRedisRepository.save(merchant);
-            System.out.println(merchant.getMerchant());
+        for(MccSpecialityMerchantModel mccSpecialityMerchant : mccSpecialistList){
+            for (MerchantTypeRedisModel merchantType : merchantTypeAllList) {
+                boolean toCheck = containsWord(merchantType.getMerchant(), mccSpecialityMerchant.getSpeciality());
+                if(toCheck){
+                    merchantType.setMcc(mccSpecialityMerchant.getMcc());
+                    merchantTypeRedisRepository.save(merchantType);
+                }
+            }
         }
-
         MerchantTypeRedisModel merchantTypeRedisModel = new MerchantTypeRedisModel();
         merchantTypeRedisModel.setTypeBusiness(request.getTypeBusiness());
         merchantTypeRedisModel.setMcc(request.getMcc());
@@ -62,7 +72,25 @@ public class MerchantTypeService {
             return false;
         }
         Pattern pattern = Pattern.compile(Pattern.quote(word), Pattern.CASE_INSENSITIVE);
-        return pattern.matcher(merchantDescription).find();
+        boolean merchantBoolean =  pattern.matcher(merchantDescription).find();
+        System.out.println(merchantBoolean);
+
+        return merchantBoolean;
     }
 
+
+    public void findByName(String key){
+        String value = redisConfig.jedisConnection().get(key);
+        System.out.println(value);
+
+    }
+
+
+    public void redisClearDatabase(){
+        Jedis jedis = new Jedis("localhost", 16379);
+        jedis.flushDB();
+        System.out.println("Número de chaves após flushDB: " + jedis.dbSize());
+        jedis.close();
+
+    }
 }
