@@ -1,33 +1,44 @@
 version: "3"
 
 services:
-   postgres-caju:
-     container_name: postgres-caju
-     image: postgres
-     environment:
-       POSTGRES_USER: root
-       POSTGRES_PASSWORD: "123456"
-       POSTGRES_DB: "caju"
-     ports:
-       - "15432:5432"
-     volumes:
-       - postgres-vol-caju:/var/lib/postgresql/data
-     networks:
-       - postgres-caju-network
+  postgres-caju:
+    container_name: postgres-caju
+    image: postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: "123456"
+      POSTGRES_DB: "caju"
+    ports:
+      - "15432:5432"
+    volumes:
+      - postgres-vol-caju:/var/lib/postgresql/data
+    networks:
+      - postgres-caju-network
 
+  pgadmin-caju:
+    container_name: pgadmin-caju
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "jander.webmaster@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "123456"
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres-caju
+    networks:
+      - postgres-caju-network
 
-   pgadmin-compose:
-     container_name: pgadmin-compose
-     image: dpage/pgadmin4
-     environment:
-       PGADMIN_DEFAULT_EMAIL: "jander.webmaster@gmail.com"
-       PGADMIN_DEFAULT_PASSWORD: "123456"
-     ports:
-       - "16543:80"
-     depends_on:
-       - postgres-caju
-     networks:
-       - postgres-caju-network
+  redis-caju:
+    container_name: redis-caju
+    image: redis:latest
+    ports:
+      - "16379:6379"
+    volumes:
+      - redis-vol-caju:/bitnami/redis/data
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - postgres-caju-network
 
 networks:
   postgres-caju-network:
@@ -35,4 +46,6 @@ networks:
 
 volumes:
   postgres-vol-caju:
+    driver: local
+  redis-vol-caju:
     driver: local
