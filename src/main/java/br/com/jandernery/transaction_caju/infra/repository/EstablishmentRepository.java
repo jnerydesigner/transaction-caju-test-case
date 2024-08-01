@@ -16,4 +16,7 @@ public interface EstablishmentRepository extends JpaRepository<EstablishmentMode
 
     @Query(value = "SELECT * FROM tb_establishment te WHERE te.merchant = ?1", nativeQuery = true)
     EstablishmentModel findEstablishmentByName(String name);
+
+    @Query("SELECT e FROM EstablishmentModel e WHERE e.merchant = :name")
+    Optional<EstablishmentModel> findEstablishmentByNameOpt(@Param("name") String name);
 }

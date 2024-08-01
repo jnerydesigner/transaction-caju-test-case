@@ -7,6 +7,7 @@ import br.com.jandernery.transaction_caju.infra.repository.EstablishmentReposito
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -27,5 +28,11 @@ public class EstablishmentService {
         EstablishmentModel establishmentModel = establishmentRepository.findEstablishmentByName(merchant);
 
         return establishmentModel;
+    }
+
+    public List<EstablishmentModel> findAll(){
+        List<EstablishmentModel> establishmentModels = establishmentRepository.findAll();
+
+        return establishmentModels;
     }
 }

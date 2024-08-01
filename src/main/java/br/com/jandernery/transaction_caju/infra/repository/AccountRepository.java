@@ -16,6 +16,8 @@ public interface AccountRepository extends JpaRepository<AccountModel, Long> {
     AccountModel findByUserIdAndId(Long userId, Long accountId);
 
 
+
+
 //
 //    @Query("SELECT COUNT(a) > 0 FROM AccountModel a WHERE a.user.id = :userId AND a.typeAccount = :typeAccount")
 //    Boolean checkUserAndMccExists(@Param("userId") Long userId, @Param("typeAccount") String typeAccount);
